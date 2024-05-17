@@ -169,7 +169,7 @@ func main() {
 	case "*":
 		result = mult(expression)
 	}
-	fmt.Println(result)
+
 	if arabic[0] != true {
 
 		resultRom := toRom(result) //Переводим ответ в римские числа
