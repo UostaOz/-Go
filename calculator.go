@@ -23,6 +23,17 @@ var letters = map[string]int{
 	"IX":   9,
 	"X":    10,
 }
+var lettersMore = map[string]int{
+	"X":    1,
+	"XX":   2,
+	"XXX":  3,
+	"XL":   4,
+	"L":    5,
+	"LX":   6,
+	"LXX":  7,
+	"LXXX": 8,
+	"XC":   9,
+}
 
 // В данной функции мы определям наши дальнешие действия и получаем срез строковый
 func sign(s string) ([]string, string) {
@@ -83,10 +94,26 @@ func toArabic(number string) int {
 // функция для перевода араских чисел в римские для ответа в действиях с римскими числами
 func toRom(i int) string {
 	var rom string
-	for key, value := range letters {
-		if i == value {
-			rom = key
+	if i <= 10 {
+		for key, value := range letters {
+			if i == value {
+				rom = key
+			}
 		}
+	} else if i > 10 && i < 100 {
+		sl := strings.Split(strconv.Itoa(i), "")
+		for key, value := range lettersMore {
+			if sl[0] == strconv.Itoa(value) {
+				rom = key
+				for key, value = range letters {
+					if sl[1] == strconv.Itoa(value) {
+						rom = rom + key
+					}
+				}
+			}
+		}
+	} else if i == 100 {
+		rom = "C"
 	}
 	return rom
 }
@@ -122,6 +149,7 @@ func main() {
 			}
 		} else {
 			num := toArabic(value)
+
 			expression = append(expression, num)
 			arabic = append(arabic, false)
 		}
@@ -141,8 +169,11 @@ func main() {
 	case "*":
 		result = mult(expression)
 	}
+	fmt.Println(result)
 	if arabic[0] != true {
+
 		resultRom := toRom(result) //Переводим ответ в римские числа
+
 		if resultRom == "" {
 			fmt.Println("Ответ с римскими цифрами не должен быть отрицательным и = 0, прости!")
 		} else {
